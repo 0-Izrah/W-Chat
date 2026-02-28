@@ -1,0 +1,31 @@
+{% extends 'index.html' %}
+{% block content %}
+<h3>Welcome to the Chat Room</h3>
+<button type="button" name="leave" id="leave-btn" onclick = "leaveRoom()">Leave Room</button>
+<div class="message-box">
+
+    <h2>Room:{{code}}</h2>
+    <p id="connection-status">🟡 Connecting...</p>
+    <p id = "member-count">Member Count:loading.</p>
+    <div class="messages" id="messages">
+
+    </div>
+    <p id="typing-indicator"></p>
+    <div class="inputs">
+        <input type="text" rows="3" id="message" name ="message" placeholder="Type your message here...">
+        <button type="button" name="send" id="send-btn" onclick="sendMessage()">Send</button>
+
+    </div>
+    
+</div>
+
+<script>
+    const currentUsername = "{{ name }}";
+</script>
+<script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+{% for msg in messages%}
+    <script type="text/javascript">
+        createMessage("{{msg['name']}}" , "{{msg['message']}}" , currentUsername)
+    </script>
+{% endfor %}
+{% endblock %}

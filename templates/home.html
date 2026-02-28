@@ -1,0 +1,49 @@
+{% extends "index.html" %}
+{% block content %}
+<form method = "POST" class="buttons">
+    <h3>Enter the chat room </h3>
+    <div>
+        <label for="">Name: </label>
+        <input type="text" placeholder = "Pick a name" name="name" value="{{name}}">
+    </div>
+    <div class="join">
+        <input type="text" placeholder="Room Code(to join)" name="code" value="{{code}}">
+        <div class = "join-buttons">
+            <button type="submit" name="join">Join a room</button>
+            <button type="submit" name="create" >Create a Room</button>
+        </div>
+    </div>
+
+    {%if error%}
+    <ul>
+        <li>
+            {{error}}
+        </li>
+    </ul>
+    {% endif %}
+
+    {% if active_rooms %}
+    <div class="active-rooms">
+        <h4>Active Rooms</h4>
+        {% for room in active_rooms %}
+        <div class="room-item">
+            <span>{{room.code}} ({{room.members}} member{{room.members != 1 and "s" or ""}})</span>
+            <button type="submit" name="join" value="true" onclick="document.querySelector('[name=code]').value='{{room.code}}'">Join</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if room_history %}
+    <div class="room-history">
+        <h4>Your Recent Rooms</h4>
+        {% for room in room_history %}
+        <div class="room-item">
+            <span>{{room.code}} - Last active: {{room.last_active}}</span>
+            <button type="submit" name="rejoin" value="true" onclick="document.querySelector('[name=code]').value='{{room.code}}'">Rejoin</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</form>
+{% endblock %}
