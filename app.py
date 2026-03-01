@@ -3,11 +3,11 @@ from flask_socketio import join_room , leave_room , send , SocketIO
 import random
 from string import ascii_uppercase
 from datetime import datetime
-import socket
+import os
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "qwertydsuiop"
-socketio = SocketIO(app)
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "qwertydsuiop")
+socketio = SocketIO(app, async_mode="gevent", cors_allowed_origins="*")
 
 rooms = {}
 user_room_history = {}  
@@ -130,23 +130,5 @@ def disconnect():
             send({"members": rooms[room]["members"]}, to=room)
     
 if __name__ == "__main__":
-    import socket
-    def get_wifi_ip():
-        try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            s.connect(("8.8.8.8", 80))
-            ip = s.getsockname()[0]
-            s.close()
-            return ip
-        except Exception:
-            return "localhost"
-    
-    local_ip = get_wifi_ip()
-    print(f"\n{'='*40}")
-    print(f"  Chat server running!")
-    print(f"  Local:   http://localhost:5000")
-    print(f"  Network: http://{local_ip}:5000")
-    print(f"  Share the Network URL with others")
-    print(f"  on the same WiFi to chat!")
-    print(f"{'='*40}\n")
-    socketio.run(app, host="0.0.0.0", port=5000, debug=False, allow_unsafe_werkzeug=True)
+    port = int(os.environ.get("PORT", 5000))
+    socketio.run(app, host="0.0.0.0", port=port, debug=False)
