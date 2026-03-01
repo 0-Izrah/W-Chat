@@ -142,9 +142,10 @@ if __name__ == "__main__":
             return "localhost"
     
     local_ip = get_wifi_ip()
+    port = int(os.environ.get("PORT", 5000))
     print(f"\n{'='*40}")
     print(f"  Chat server running!")
-    print(f"  Local:   http://localhost:5000")
-    print(f"  Network: http://{local_ip}:5000")
+    print(f"  Local:   http://localhost:{port}")
+    print(f"  Network: http://{local_ip}:{port}")
     print(f"{'='*40}\n")
-    socketio.run(app, host="0.0.0.0", port=5000, debug=False, allow_unsafe_werkzeug=True)
+    socketio.run(app, host="0.0.0.0", port=port, debug=False, allow_unsafe_werkzeug=True)
